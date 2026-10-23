@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ناصر  | Nasser Gamer TV - Official Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #080a0f;
+            --card-bg: rgba(22, 27, 38, 0.75);
+            --card-border: rgba(255, 0, 80, 0.25);
+            --primary: #ff0050;
+            --primary-glow: rgba(255, 0, 80, 0.5);
+            --secondary: #00f2fe;
+            --secondary-glow: rgba(0, 242, 254, 0.4);
+            --accent: #ffee00;
+            --text-main: #ffffff;
+            --text-muted: #9aa1b9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Animated Canvas Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Ambient Glows */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: floatGlow 10s infinite alternate ease-in-out;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: floatGlow 12s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 30px) scale(1.1); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        /* Music Floating Toggle */
+        .music-bar {
+            background: rgba(18, 22, 32, 0.85);
+            border: 1px solid var(--primary-glow);
+            backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.2);
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .music-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .music-icon-pulse {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.9rem;
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px var(--primary); }
+            100% { box-shadow: 0 0 18px var(--secondary); }
+        }
+
+        .music-text h4 {
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .music-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .music-toggle-btn {
+            background: linear-gradient(135deg, var(--primary), #d60043);
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .music-toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            animation: scanline 3s infinite linear;
+        }
+
+        /* Avatar */
+        .avatar-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            animation: rotateRing 4s linear infinite;
+        }
+
+        @keyframes rotateRing {
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar-img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-color);
+            background: #111;
+        }
+
+        .live-tag {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff0000;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 3px 14px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.8);
+            animation: livePulse 1.2s infinite alternate;
+        }
+
+        @keyframes livePulse {
+            0% { transform: translateX(-50%) scale(0.95); opacity: 0.8; }
+            100% { transform: translateX(-50%) scale(1.08); opacity: 1; }
+        }
+
+        .streamer-name {
+            font-size: 2.3rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .streamer-handle {
+            color: var(--primary);
+            font-size: 1.05rem;
+            font-weight: 800;
+            direction: ltr;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .bio-box {
+            background: rgba(10, 12, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 650px;
+            margin: 0 auto 30px;
+            text-align: right;
+        }
+
+        .bio-title {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bio-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(15, 18, 26, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 15px 10px;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            background: rgba(255, 0, 80, 0.05);
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Social Links Grid */
+        .social-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #fff;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: rgba(18, 22, 32, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .social-link:hover i {
+            transform: scale(1.2) rotate(-8deg);
+        }
+
+        /* Platform Color Styles */
+        .social-link.tiktok {
+            border-right: 4px solid #ff0050;
+        }
+        .social-link.tiktok:hover {
+            background: linear-gradient(90deg, rgba(255, 0, 80, 0.2), rgba(18, 22, 32, 0.9));
+            border-color: #ff0050;
+        }
+
+        .social-link.kick {
+            border-right: 4px solid #53fc18;
+        }
+        .social-link.kick:hover {
+            background: linear-gradient(90deg, rgba(83, 252, 24, 0.2), rgba(18, 22, 32, 0.9));
+            border-color: #53fc18;
+        }
+
+        .social-link.youtube {
+            border-right: 4px solid #ff0000;
+        }
+        .social-link.youtube:hover {
+            background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(18, 22, 32, 0.9));
+            border-color: #ff0000;
+        }
+
+        .social-link.facebook {
+            border-right: 4px solid #1877f2;
+        }
+        .social-link.facebook:hover {
+            background: linear-gradient(90deg, rgba(24, 119, 242, 0.2), rgba(18, 22, 32, 0.9));
+            border-color: #1877f2;
+        }
+
+        .social-link.discord {
+            border-right: 4px solid #5865f2;
+            grid-column: span 2;
+        }
+        .social-link.discord:hover {
+            background: linear-gradient(90deg, rgba(88, 101, 242, 0.2), rgba(18, 22, 32, 0.9));
+            border-color: #5865f2;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 20px 15px; }
+            .social-grid { grid-template-columns: 1fr; }
+            .social-link.discord { grid-column: span 1; }
+            .streamer-name { font-size: 1.8rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .music-bar { flex-direction: column; gap: 12px; text-align: center; }
+            .music-info { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Neon Particles Background -->
+    <canvas id="bgCanvas"></canvas>
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <div class="container">
+        
+
+        <!-- Main Card -->
+        <div class="profile-card">
+            
+            <!-- Avatar -->
+            <div class="avatar-container">
+                <div class="avatar-ring"></div>
+                <img src="https://p16-common-sign.tiktokcdn.com/tos-alisg-avt-0068/12deda85e0130b166321453581ae2afd~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=c5d7f9a3&x-expires=1792947600&x-signature=gdObZ91HgK7SJBTjWps1jvwIRpQ%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my" alt="ناصر HD" class="avatar-img">
+                <span class="live-tag">LIVE</span>
+            </div>
+
+            <!-- Header Info -->
+            <h1 class="streamer-name">ناصر</h1>
+            <span class="streamer-handle">@nassergamertv</span>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">PharaohS</div>
+                    <div class="stat-label">ليدر جايلد</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10:00 PM</div>
+                    <div class="stat-label">موعد البث المباشر (مصر)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Egyptian</div>
+                    <div class="stat-label">أقوى ستريمر مصري</div>
+                </div>
+            </div>
+
+            <!-- Bio / Biography -->
+            <div class="bio-box">
+                <div class="bio-title">
+                    <i class="fa-solid fa-id-card"></i>
+                    <span>السيرة الذاتية - Bio</span>
+                </div>
+       <p class="bio-text">
+                    أهلاً بكم في الموقع الرسمي للستريمر ناصر. صانع محتوى وستريمر جيمنج مصري، أقدم بث مباشر مع أقوى جايلد في عالم سيلك رود اسمها <strong>pharaohs</strong>. 🔥
+                </p>
+            </div>
+
+            <!-- Social Links Grid -->
+            <div class="social-title">
+                <i class="fa-solid fa-share-nodes" style="color: var(--primary);"></i>
+                <span>منصات التواصل الاجتماعي الرسمية</span>
+            </div>
+
+            <div class="social-grid">
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@nassergamertv" target="_blank" class="social-link tiktok">
+                    <span>حساب التيك توك (TikTok)</span>
+                    <i class="fa-brands fa-tiktok" style="color: #ff0050;"></i>
+                </a>
+
+                <!-- Kick -->
+                <a href="https://kick.com/nassergamin3g" target="_blank" class="social-link kick">
+                    <span>قناة كيك (Kick)</span>
+                    <i class="fa-solid fa-bolt" style="color: #53fc18;"></i>
+                </a>
+
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/channel/UCF_aPAncPtkh4Mksq2223JQ" target="_blank" class="social-link youtube">
+                    <span>قناة اليوتيوب (YouTube)</span>
+                    <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/nassergameing" target="_blank" class="social-link facebook">
+                    <span>صفحة الفيسبوك (Facebook)</span>
+                    <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i>
+                </a>
+
+                <!-- Discord -->
+                <a href="https://discord.com/users/526605807475752961" target="_blank" class="social-link discord">
+                    <span>اكونت ناصر علي الدسيكورد</span>
+                    <i class="fa-brands fa-discord" style="color: #5865f2;"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>جميع الحقوق محفوظة © 2026 - Nasser Gamer TV (ناصر) ❤️</p>
+        </footer>
+
+    </div>
+
+    <!-- Canvas Animation & Hype Web Audio Synth -->
+    <script>
+        /* ----------------------------------
+           1. Dynamic Canvas Background
+        ----------------------------------- */
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 45;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.color = Math.random() > 0.5 ? '#ff0050' : '#00f2fe';
+                this.alpha = Math.random() * 0.6 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Connect nearby particles with subtle lines
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.save();
+                        ctx.globalAlpha = (1 - distance / 100) * 0.15;
+                        ctx.strokeStyle = particles[a].color;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        /* ----------------------------------
+           2. Cyberpunk Synthwave Audio Engine
+        ----------------------------------- */
+        let audioCtx = null;
+        let isPlaying = false;
+        let timerId = null;
+
+        function toggleHypeMusic() {
+            const btnText = document.getElementById('btnText');
+            const playIcon = document.getElementById('playIcon');
+            const statusText = document.getElementById('musicStatusText');
+            const musicIcon = document.getElementById('musicIcon');
+
+            if (!isPlaying) {
+                startSynth();
+                isPlaying = true;
+                btnText.textContent = 'إيقاف الموسيقى';
+                playIcon.className = 'fa-solid fa-pause';
+                statusText.textContent = 'الموسيقى الحماسية تعمل الآن 🔥';
+                musicIcon.style.animationDuration = '0.6s';
+            } else {
+                stopSynth();
+                isPlaying = false;
+                btnText.textContent = 'تشغيل الموسيقى';
+                playIcon.className = 'fa-solid fa-play';
+                statusText.textContent = 'اضغط تشغيل لتشغيل النغمة الحماسية الخاصة بالبث';
+                musicIcon.style.animationDuration = '1.5s';
+            }
+        }
+
+        function startSynth() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            let step = 0;
+            // High-energy Synthwave Bassline Notes
+            const bassNotes = [110, 110, 146.83, 110, 130.81, 110, 164.81, 146.83];
+            const leadNotes = [220, 293.66, 329.63, 440, 392, 329.63, 293.66, 220];
+
+            timerId = setInterval(() => {
+                const now = audioCtx.currentTime;
+
+                // 1. Bass synth
+                const bassOsc = audioCtx.createOscillator();
+                const bassGain = audioCtx.createGain();
+                bassOsc.type = 'sawtooth';
+                bassOsc.frequency.setValueAtTime(bassNotes[step % bassNotes.length], now);
+                
+                bassGain.gain.setValueAtTime(0.12, now);
+                bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+                bassOsc.connect(bassGain);
+                bassGain.connect(audioCtx.destination);
+
+                bassOsc.start(now);
+                bassOsc.stop(now + 0.22);
+
+                // 2. Lead synth on alternate beats
+                if (step % 2 === 0) {
+                    const leadOsc = audioCtx.createOscillator();
+                    const leadGain = audioCtx.createGain();
+                    leadOsc.type = 'square';
+                    leadOsc.frequency.setValueAtTime(leadNotes[(step / 2) % leadNotes.length], now);
+
+                    leadGain.gain.setValueAtTime(0.06, now);
+                    leadGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+                    leadOsc.connect(leadGain);
+                    leadGain.connect(audioCtx.destination);
+
+                    leadOsc.start(now);
+                    leadOsc.stop(now + 0.32);
+                }
+
+                step++;
+            }, 180);
+        }
+
+        function stopSynth() {
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+        }
+    </script>
+</body>
+</html>
